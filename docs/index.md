@@ -7,7 +7,7 @@ displayOnMenu: true
 
 ### Core
 * [Getting Started](general/gettingstarted.html)
-* Verifying Arguments
+* [Verifying Arguments](general/argumentverification.html)
 * Object Helpers
 * Equality
 * Concurrency
