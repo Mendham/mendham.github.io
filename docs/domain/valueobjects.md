@@ -95,6 +95,6 @@ When using `IValueObject<T>`, `Equals(object)` and  `GetHashCode()` must be over
 
 To simplify this process, Mendham has extension methods that encapsulate the equality functionality. Equality is based on the fields defined in `EqualityComponents` which should include every public property in the value object.
 
-<h2>Equality in Value Objects</h2>
+<h2>Equality and Value Objects</h2>
 
 Mendham handles equality when comparing one value object to another. For two value objects to be equal (or to have the same hash code), the two objects must be of the same type and every public property must be equal.
