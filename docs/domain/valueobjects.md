@@ -37,7 +37,8 @@ When using ValueObject\<T>, Mendham handles the work required to make an object 
 - Overloading `==` and `!=` operators
 
 
-<h2>POCO Value Objects</h2>
+POCO Value Objects
+------------------
 
 There may be situations where using a base class cannot be used to define a value object. This can occur when using a struct instead of a class or when combining Mendham with other frameworks. Mendham offers support for this scenario by using the `IValueObject<T>` interface.
 
@@ -95,6 +96,7 @@ When using `IValueObject<T>`, `Equals(object)` and  `GetHashCode()` must be over
 
 To simplify this process, Mendham has extension methods that encapsulate the equality functionality. Equality is based on the fields defined in `EqualityComponents` which should include every public property in the value object.
 
-<h2>Equality and Value Objects</h2>
+Equality and Value Objects
+------------------
 
 Mendham handles equality when comparing one value object to another. For two value objects to be equal (or to have the same hash code), the two objects must be of the same type and every public property must be equal.
