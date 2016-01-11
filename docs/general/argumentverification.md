@@ -9,17 +9,17 @@ public void Foo(object objValue, int intVal, string strValue)
 {
     if (objValue == null)
     {
-        throw new ArgumentException("objValue cannot be null");
+        throw new ArgumentNullException(nameof(objValue));
     }
 
     if (intVal num % 2 == 0)
     {
-        throw new ArgumentException("intVal must be greater even");
+        throw new ArgumentException("intVal must be greater even", nameof(intVal));
     }
 
     if (string.IsNullOrWhiteSpace(strValue))
     {
-        throw new ArgumentException("strValue cannot be null or whitespace");
+        throw new ArgumentException("strValue cannot be null or whitespace", nameof(strValue));
     }
 
     // Do Something
@@ -31,24 +31,24 @@ Adding multiple conditional blocks this way can distract from the intension of t
 {% highlight csharp %}
 public void Foo(object objValue, int intVal, string strValue)
 {
-    objValue.VerifyArgumentNotNull("objValue cannot be null");
-    intVal.VerifyArgumentMeetsCriteria(num => num % 2 == 0, "intVal must be even");
-    strValue.VerifyArgumentNotNullOrWhiteSpace("strValue cannot be null or whitespace");
+    objValue.VerifyArgumentNotNull(nameof(objValue));
+    intVal.VerifyArgumentMeetsCriteria(nameof(intVal), num => num % 2 == 0, "Value must be even");
+    strValue.VerifyArgumentNotNullOrWhiteSpace(nameof(strValue));
 
     // Do Something
 }
 {% endhighlight %}
 
-Mendham's argument verification extension methods test for a condition and throw the ArgumentException if that condition is not met. This exception contains the message that is defined in the final argument of the extension method. 
+Mendham's argument verification extension methods test for a condition and throw the ArgumentException if that condition is not met. Most of the extension methods provide a clear message as to the reason for the exception but allow for an optional argument to add an additional mesasage. 
 
 Argument verification extension methods can be chained together to allow for multiple checks of a single argument to each have their own individual message.
 
 {% highlight csharp %}
 public void Foo(string strValue)
 {
-    strValue.VerifyArgumentNotNull("strValue cannot be null")
-        .VerifyArgumentLength(2, 5, "strValue must have a length between 2 and 5")
-        .VerifyArgumentMeetsCriteria(str => !str.Contains("$"), "strValue cannot contain a $");
+    strValue.VerifyArgumentNotNull(nameof(strValue))
+        .VerifyArgumentLength(nameof(strValue), 2, 5)
+        .VerifyArgumentMeetsCriteria(nameof(strValue), str => !str.Contains("$"), "Value cannot contain a $");
 
     // Do Something
 }
@@ -65,10 +65,10 @@ public class Foo
     public Foo(int intVal, string strValue)
     {
         _intVal = intVal
-            .VerifyArgumentMeetsCriteria(num => num % 2 == 0, "intVal must be even");
+            .VerifyArgumentMeetsCriteria(nameof(intVal), num => num % 2 == 0, "Value must be even");
         _strVal = strValue
-            .VerifyArgumentNotNullOrWhiteSpace("strValue cannot be null or whitespace")
-            .VerifyArgumentLength(2, 5, "strValue must have a length between 2 and 5");
+            .VerifyArgumentNotNullOrWhiteSpace(nameof(strValue))
+            .VerifyArgumentLength(nameof(strValue), 2, 5);
     }
 }
 {% endhighlight %}
@@ -78,12 +78,12 @@ Argument Verification Methods
 
 | Name | Description |
 |:----|:-------|
-| `VerifyArgumentNotNull<T>(T argument, string message)` | Throws an ArgumentException the argument is null. |
-| `VerifyArgumentNotDefaultValue<T>(T argument, string message)` | Throws an ArgumentException when the argument is equal to the default of T. The default of T depends on the type, but for reference objects, this is effectively the same as a null check. |
-| `VerifyArgumentNotNullOrEmpty<T>(IEnumerable<T> argument, string message)` | Throws an ArgumentException when the enumerable argument is null or empty |
-| `VerifyArgumentNotNullOrEmpty(string argument, string message)` | Throws an ArgumentException when the string argument is null or empty |
-| `VerifyArgumentNotNullOrWhiteSpace(string argument, string message)` | Throws an ArgumentException when the string argument is null or whitespace |
-| `VerifyArgumentLength(string argument, int? minimum, int? maximum, string message)` | Throws an ArgumentException when the length of the argument string is not in the range specified. When a minimum or maximum are left null, they are not considered.  |
-| `VerifyArgumentLength(string argument, int? minimum, int? maximum, bool trimStringFirst, string message)` | Throws an ArgumentException when the length of the argument string is not in the range specified. When a minimum or maximum are left null, they are not considered. When trimStringFirst is set to true, whitespace on end of string is not considered for the range check. |
-| `VerifyArgumentRange(int argument, int? minimum, int? maximum, string message)` | Throws an ArgumentException when integer argument is not with the range specified. When a minimum or maximum are left null, they are not considered. |
-|  `VerifyArgumentMeetsCriteria<T>(T argument, Func<T, bool> acceptanceCriteria, string message)` | Throws an ArgumentException when the argument does not meet the acceptance criteria. This method should be used when the other methods do not meet the needs for checking the argument. |
+| `VerifyArgumentNotNull<T>(T argument, string paramName)` | Throws an ArgumentException the argument is null. |
+| `VerifyArgumentNotDefaultValue<T>(T argument, string paramName)` | Throws an ArgumentException when the argument is equal to the default of T. The default of T depends on the type, but for reference objects, this is effectively the same as a null check. |
+| `VerifyArgumentNotNullOrEmpty<T>(IEnumerable<T> argument, string paramName)` | Throws an ArgumentException when the enumerable argument is null or empty |
+| `VerifyArgumentNotNullOrEmpty(string argument, string paramName)` | Throws an ArgumentException when the string argument is null or empty |
+| `VerifyArgumentNotNullOrWhiteSpace(string argument, string paramName)` | Throws an ArgumentException when the string argument is null or whitespace |
+| `VerifyArgumentLength(string argument, string paramName, int? minimum, int? maximum)` | Throws an ArgumentException when the length of the argument string is not in the range specified. When a minimum or maximum are left null, they are not considered.  |
+| `VerifyArgumentLength(string argument, string paramName, int? minimum, int? maximum, bool trimStringFirst)` | Throws an ArgumentException when the length of the argument string is not in the range specified. When a minimum or maximum are left null, they are not considered. When trimStringFirst is set to true, whitespace on end of string is not considered for the range check. |
+| `VerifyArgumentRange(int argument, string paramName, int? minimum, int? maximum)` | Throws an ArgumentException when integer argument is not with the range specified. When a minimum or maximum are left null, they are not considered. |
+|  `VerifyArgumentMeetsCriteria<T>(T argument, string paramName, Func<T, bool> acceptanceCriteria, string message)` | Throws an ArgumentException when the argument does not meet the acceptance criteria. This method should be used when the other methods do not meet the needs for checking the argument. Because this method is a catch all for argument checks not covered by the other extension methods, this method always requires a message. |
