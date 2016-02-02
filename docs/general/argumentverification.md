@@ -32,7 +32,7 @@ Adding multiple conditional blocks this way can distract from the intension of t
 public void Foo(object objValue, int intVal, string strValue)
 {
     objValue.VerifyArgumentNotNull(nameof(objValue));
-    intVal.VerifyArgumentMeetsCriteria(nameof(intVal), num => num % 2 == 0, "Value must be even");
+    intVal.VerifyArgumentMeetsCriteria(num => num % 2 == 0, nameof(intVal), "Value must be even");
     strValue.VerifyArgumentNotNullOrWhiteSpace(nameof(strValue));
 
     // Do Something
@@ -48,7 +48,7 @@ public void Foo(string strValue)
 {
     strValue.VerifyArgumentNotNull(nameof(strValue))
         .VerifyArgumentLength(nameof(strValue), 2, 5)
-        .VerifyArgumentMeetsCriteria(nameof(strValue), str => !str.Contains("$"), "Value cannot contain a $");
+        .VerifyArgumentMeetsCriteria(str => !str.Contains("$"), nameof(strValue), "Value cannot contain a $");
 
     // Do Something
 }
@@ -65,7 +65,7 @@ public class Foo
     public Foo(int intVal, string strValue)
     {
         _intVal = intVal
-            .VerifyArgumentMeetsCriteria(nameof(intVal), num => num % 2 == 0, "Value must be even");
+            .VerifyArgumentMeetsCriteria(num => num % 2 == 0, nameof(intVal), "Value must be even");
         _strVal = strValue
             .VerifyArgumentNotNullOrWhiteSpace(nameof(strValue))
             .VerifyArgumentLength(nameof(strValue), 2, 5);
