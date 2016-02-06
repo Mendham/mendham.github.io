@@ -11,9 +11,9 @@ title: Mendham
 description: > # this means to ignore newlines until "baseurl:"
  Modern .NET application with a rich and testable domain model
 baseurl: "/Mendham" # the subpath of your site, e.g. /blog
-url: "https://cbeall.github.io/Mendham" # the base hostname & protocol for your site
+url: "https://mendham.github.io" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
-github_username:  cbeall
+github_username:  mendham
 
 # Build settings
 markdown: kramdown
